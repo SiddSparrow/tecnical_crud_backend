@@ -22,7 +22,6 @@ import {
   ApiConsumes,
 } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { ProdutosService } from './produtos.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
@@ -30,6 +29,7 @@ import { PaginationQueryDto } from '../common/dto/pagination.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from '../usuarios/entities/usuario.entity';
 
 @ApiTags('produtos')
 @Controller('produtos')
@@ -39,7 +39,7 @@ export class ProdutosController {
   constructor(private readonly produtosService: ProdutosService) {}
 
   @Post()
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Criar novo produto' })
   @ApiResponse({ status: 201, description: 'Produto criado com sucesso' })
   create(@Body() createProdutoDto: CreateProdutoDto) {
@@ -47,7 +47,7 @@ export class ProdutosController {
   }
 
   @Get()
-  @Roles('ADMIN', 'USUARIO')
+  @Roles(UserRole.ADMIN, UserRole.USUARIO)
   @ApiOperation({ summary: 'Listar todos os produtos' })
   @ApiResponse({ status: 200, description: 'Lista de produtos' })
   findAll(@Query() paginationQuery: PaginationQueryDto) {
@@ -55,7 +55,7 @@ export class ProdutosController {
   }
 
   @Get(':id')
-  @Roles('ADMIN', 'USUARIO')
+  @Roles(UserRole.ADMIN, UserRole.USUARIO)
   @ApiOperation({ summary: 'Buscar produto por ID' })
   @ApiResponse({ status: 200, description: 'Produto encontrado' })
   @ApiResponse({ status: 404, description: 'Produto não encontrado' })
@@ -64,7 +64,7 @@ export class ProdutosController {
   }
 
   @Patch(':id')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Atualizar produto' })
   @ApiResponse({ status: 200, description: 'Produto atualizado' })
   @ApiResponse({ status: 404, description: 'Produto não encontrado' })
@@ -76,7 +76,7 @@ export class ProdutosController {
   }
 
   @Delete(':id')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Deletar produto' })
   @ApiResponse({ status: 200, description: 'Produto deletado' })
   @ApiResponse({ status: 404, description: 'Produto não encontrado' })
@@ -85,7 +85,7 @@ export class ProdutosController {
   }
 
   @Post(':id/imagens')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Upload de imagens do produto' })
   @ApiConsumes('multipart/form-data')
   @ApiResponse({ status: 200, description: 'Imagens adicionadas com sucesso' })
@@ -96,8 +96,9 @@ export class ProdutosController {
         filename: (req, file, cb) => {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+          // Derive extension from mimetype, not from client-provided filename
+          const ext = file.mimetype.split('/')[1] || 'bin';
+          cb(null, `${uniqueSuffix}.${ext}`);
         },
       }),
       fileFilter: (req, file, cb) => {
@@ -125,7 +126,7 @@ export class ProdutosController {
   }
 
   @Delete(':id/imagens/:imagemId')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Deletar imagem do produto' })
   @ApiResponse({ status: 200, description: 'Imagem deletada com sucesso' })
   removeImage(

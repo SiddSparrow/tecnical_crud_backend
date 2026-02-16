@@ -24,6 +24,7 @@ import { PaginationQueryDto } from '../common/dto/pagination.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from '../usuarios/entities/usuario.entity';
 
 @ApiTags('clientes')
 @Controller('clientes')
@@ -36,7 +37,7 @@ export class ClientesController {
   ) {}
 
   @Post()
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Criar novo cliente' })
   @ApiResponse({ status: 201, description: 'Cliente criado com sucesso' })
   @ApiResponse({ status: 409, description: 'CNPJ já cadastrado' })
@@ -45,7 +46,7 @@ export class ClientesController {
   }
 
   @Get()
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Listar todos os clientes' })
   @ApiResponse({ status: 200, description: 'Lista de clientes' })
   findAll(@Query() paginationQuery: PaginationQueryDto) {
@@ -53,7 +54,7 @@ export class ClientesController {
   }
 
   @Get('consulta-cnpj/:cnpj')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Consultar dados de CNPJ na API externa' })
   @ApiResponse({ status: 200, description: 'Dados do CNPJ' })
   @ApiResponse({ status: 400, description: 'CNPJ inválido ou não encontrado' })
@@ -62,7 +63,7 @@ export class ClientesController {
   }
 
   @Get(':id')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Buscar cliente por ID' })
   @ApiResponse({ status: 200, description: 'Cliente encontrado' })
   @ApiResponse({ status: 404, description: 'Cliente não encontrado' })
@@ -71,7 +72,7 @@ export class ClientesController {
   }
 
   @Patch(':id')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Atualizar cliente' })
   @ApiResponse({ status: 200, description: 'Cliente atualizado' })
   @ApiResponse({ status: 404, description: 'Cliente não encontrado' })
@@ -83,7 +84,7 @@ export class ClientesController {
   }
 
   @Delete(':id')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Deletar cliente' })
   @ApiResponse({ status: 200, description: 'Cliente deletado' })
   @ApiResponse({ status: 404, description: 'Cliente não encontrado' })

@@ -20,7 +20,9 @@ export class CnpjService {
         throw new BadRequestException('CNPJ deve ter 14 dígitos');
       }
 
-      const response = await axios.get(`${this.baseUrl}/${cleanedCnpj}`);
+      const response = await axios.get(`${this.baseUrl}/${cleanedCnpj}`, {
+        timeout: 5000,
+      });
 
       if (!response.data) {
         throw new BadRequestException('CNPJ não encontrado');

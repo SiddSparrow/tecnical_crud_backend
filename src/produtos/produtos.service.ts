@@ -16,12 +16,20 @@ import * as path from 'path';
 
 @Injectable()
 export class ProdutosService {
+  private readonly uploadsDir = path.resolve(process.cwd(), 'uploads');
+
   constructor(
     @InjectRepository(Produto)
     private readonly produtoRepository: Repository<Produto>,
     @InjectRepository(ProdutoImagem)
     private readonly produtoImagemRepository: Repository<ProdutoImagem>,
   ) {}
+
+  private safePath(filePath: string): string | null {
+    const resolved = path.resolve(process.cwd(), filePath);
+    if (!resolved.startsWith(this.uploadsDir)) return null;
+    return resolved;
+  }
 
   async create(createProdutoDto: CreateProdutoDto): Promise<Produto> {
     const produto = this.produtoRepository.create(createProdutoDto);
@@ -77,8 +85,8 @@ export class ProdutosService {
     // Delete image files from disk
     if (produto.imagens && produto.imagens.length > 0) {
       for (const imagem of produto.imagens) {
-        const filePath = path.join(process.cwd(), imagem.path);
-        if (fs.existsSync(filePath)) {
+        const filePath = this.safePath(imagem.path);
+        if (filePath && fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
         }
       }
@@ -123,8 +131,8 @@ export class ProdutosService {
     }
 
     // Delete file from disk
-    const filePath = path.join(process.cwd(), imagem.path);
-    if (fs.existsSync(filePath)) {
+    const filePath = this.safePath(imagem.path);
+    if (filePath && fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
 

@@ -30,11 +30,12 @@ export async function seed() {
   }
 
   // Create admin user
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
   const admin = usuarioRepository.create({
     nome: 'Administrador',
-    email: 'admin@admin.com',
+    email: process.env.ADMIN_EMAIL || 'admin@admin.com',
     senha: hashedPassword,
     role: UserRole.ADMIN,
   });
@@ -42,8 +43,7 @@ export async function seed() {
   await usuarioRepository.save(admin);
 
   console.log('Admin user created successfully');
-  console.log('Email: admin@admin.com');
-  console.log('Password: admin123');
+  console.log('Email:', admin.email);
 
   await dataSource.destroy();
 }

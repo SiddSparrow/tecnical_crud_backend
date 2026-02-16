@@ -43,6 +43,7 @@ export class PedidosService {
       for (const itemDto of createPedidoDto.itens) {
         const produto = await manager.findOne(Produto, {
           where: { id: itemDto.produtoId },
+          lock: { mode: 'pessimistic_write' },
         });
 
         if (!produto) {
@@ -132,6 +133,22 @@ export class PedidosService {
 
   async remove(id: string): Promise<void> {
     const pedido = await this.findOne(id);
-    await this.pedidoRepository.remove(pedido);
+
+    await this.dataSource.transaction(async (manager) => {
+      // Restore stock for each item
+      for (const item of pedido.itens) {
+        const produto = await manager.findOne(Produto, {
+          where: { id: item.produtoId },
+          lock: { mode: 'pessimistic_write' },
+        });
+
+        if (produto) {
+          produto.estoque += item.quantidade;
+          await manager.save(Produto, produto);
+        }
+      }
+
+      await manager.remove(Pedido, pedido);
+    });
   }
 }

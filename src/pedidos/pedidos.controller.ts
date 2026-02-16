@@ -21,6 +21,7 @@ import { PaginationQueryDto } from '../common/dto/pagination.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from '../usuarios/entities/usuario.entity';
 
 @ApiTags('pedidos')
 @Controller('pedidos')
@@ -30,7 +31,7 @@ export class PedidosController {
   constructor(private readonly pedidosService: PedidosService) {}
 
   @Post()
-  @Roles('ADMIN', 'USUARIO')
+  @Roles(UserRole.ADMIN, UserRole.USUARIO)
   @ApiOperation({ summary: 'Criar novo pedido' })
   @ApiResponse({ status: 201, description: 'Pedido criado com sucesso' })
   @ApiResponse({ status: 400, description: 'Estoque insuficiente' })
@@ -40,7 +41,7 @@ export class PedidosController {
   }
 
   @Get()
-  @Roles('ADMIN', 'USUARIO')
+  @Roles(UserRole.ADMIN, UserRole.USUARIO)
   @ApiOperation({ summary: 'Listar todos os pedidos' })
   @ApiResponse({ status: 200, description: 'Lista de pedidos' })
   findAll(@Query() paginationQuery: PaginationQueryDto) {
@@ -48,7 +49,7 @@ export class PedidosController {
   }
 
   @Get(':id')
-  @Roles('ADMIN', 'USUARIO')
+  @Roles(UserRole.ADMIN, UserRole.USUARIO)
   @ApiOperation({ summary: 'Buscar pedido por ID' })
   @ApiResponse({ status: 200, description: 'Pedido encontrado' })
   @ApiResponse({ status: 404, description: 'Pedido não encontrado' })
@@ -57,7 +58,7 @@ export class PedidosController {
   }
 
   @Delete(':id')
-  @Roles('ADMIN')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Deletar pedido (apenas ADMIN)' })
   @ApiResponse({ status: 200, description: 'Pedido deletado' })
   @ApiResponse({ status: 404, description: 'Pedido não encontrado' })
