@@ -1,98 +1,241 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# CRUD Backend - Sistema de Gerenciamento de Clientes, Produtos e Pedidos
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend desenvolvido em NestJS para gerenciamento de clientes, produtos e pedidos com autenticação JWT e controle de acesso baseado em roles.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Tecnologias
 
-## Description
+- **NestJS** - Framework Node.js
+- **TypeScript** - Linguagem de programação
+- **TypeORM** - ORM para PostgreSQL
+- **PostgreSQL** - Banco de dados
+- **JWT** - Autenticação
+- **Swagger** - Documentação da API
+- **Docker** - Containerização
+- **Class Validator** - Validação de DTOs
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 Requisitos
 
-## Project setup
+- Node.js 20+
+- Docker e Docker Compose
+- npm ou yarn
+
+## 🔧 Instalação
+
+### 1. Clone o repositório
 
 ```bash
-$ npm install
+git clone <repository-url>
+cd crud_backend
 ```
 
-## Compile and run the project
+### 2. Instale as dependências
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 3. Configure as variáveis de ambiente
+
+Copie o arquivo `.env.example` para `.env`:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Ajuste as variáveis conforme necessário.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 4. Inicie o PostgreSQL com Docker
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker-compose up -d postgres
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 5. Execute o seed para criar o usuário admin
 
-## Resources
+```bash
+npm run seed
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+**Credenciais do Admin:**
+- Email: `admin@admin.com`
+- Senha: `admin123`
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 6. Inicie a aplicação
 
-## Support
+```bash
+# Desenvolvimento
+npm run start:dev
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Produção
+npm run build
+npm run start:prod
+```
 
-## Stay in touch
+## 🐳 Docker
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Para executar toda a stack (banco de dados + aplicação):
 
-## License
+```bash
+docker-compose up
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 📚 Documentação da API
+
+Acesse a documentação Swagger em:
+
+```
+http://localhost:3000/api/docs
+```
+
+## 🔐 Autenticação
+
+A API usa JWT para autenticação. Existem dois perfis de usuário:
+
+### ADMIN
+- Acesso total ao sistema
+- CRUD completo de clientes, produtos e pedidos
+
+### USUARIO
+- Pode visualizar produtos
+- Pode criar pedidos
+- Não pode excluir produtos ou pedidos
+
+### Como autenticar
+
+1. Registre-se ou faça login no endpoint `/api/v1/auth/login`
+2. Copie o token JWT retornado
+3. No Swagger, clique em "Authorize" e cole o token
+4. Ou use o header: `Authorization: Bearer <seu-token>`
+
+## 📡 Endpoints Principais
+
+### Auth
+- `POST /api/v1/auth/register` - Registrar novo usuário
+- `POST /api/v1/auth/login` - Fazer login
+
+### Clientes (ADMIN apenas)
+- `GET /api/v1/clientes` - Listar clientes (paginado)
+- `POST /api/v1/clientes` - Criar cliente
+- `GET /api/v1/clientes/:id` - Buscar cliente
+- `PATCH /api/v1/clientes/:id` - Atualizar cliente
+- `DELETE /api/v1/clientes/:id` - Deletar cliente
+- `GET /api/v1/clientes/consulta-cnpj/:cnpj` - Consultar CNPJ (API externa)
+
+### Produtos
+- `GET /api/v1/produtos` - Listar produtos (ADMIN + USUARIO)
+- `POST /api/v1/produtos` - Criar produto (ADMIN)
+- `GET /api/v1/produtos/:id` - Buscar produto (ADMIN + USUARIO)
+- `PATCH /api/v1/produtos/:id` - Atualizar produto (ADMIN)
+- `DELETE /api/v1/produtos/:id` - Deletar produto (ADMIN)
+- `POST /api/v1/produtos/:id/imagens` - Upload de imagens (ADMIN)
+- `DELETE /api/v1/produtos/:id/imagens/:imagemId` - Deletar imagem (ADMIN)
+
+### Pedidos
+- `GET /api/v1/pedidos` - Listar pedidos (ADMIN + USUARIO)
+- `POST /api/v1/pedidos` - Criar pedido (ADMIN + USUARIO)
+- `GET /api/v1/pedidos/:id` - Buscar pedido (ADMIN + USUARIO)
+- `DELETE /api/v1/pedidos/:id` - Deletar pedido (ADMIN apenas)
+
+## 🗄️ Estrutura do Banco de Dados
+
+### Tabelas
+
+- `usuarios` - Usuários do sistema
+- `clientes` - Clientes cadastrados
+- `produtos` - Produtos disponíveis
+- `produto_imagens` - Imagens dos produtos
+- `pedidos` - Pedidos realizados
+- `pedido_itens` - Itens de cada pedido
+
+## 📦 Funcionalidades Especiais
+
+### Consulta de CNPJ
+A API integra com a API pública `https://publica.cnpj.ws` para buscar dados de empresas por CNPJ.
+
+### Upload de Imagens
+Os produtos suportam múltiplas imagens. As imagens são armazenadas localmente em `./uploads/produtos` e servidas via endpoint `/uploads/produtos/<filename>`.
+
+### Controle de Estoque
+Ao criar um pedido, o sistema:
+1. Valida se o cliente existe
+2. Valida se todos os produtos existem
+3. Verifica se há estoque suficiente
+4. Decrementa o estoque automaticamente
+5. Calcula o total do pedido
+6. Tudo dentro de uma transação (rollback em caso de erro)
+
+### Paginação
+Todas as listagens suportam paginação via query params:
+- `page` - Número da página (padrão: 1)
+- `limit` - Itens por página (padrão: 10, máximo: 100)
+
+Exemplo: `GET /api/v1/produtos?page=2&limit=20`
+
+## 🧪 Testes
+
+```bash
+# Testes unitários
+npm run test
+
+# Testes e2e
+npm run test:e2e
+
+# Cobertura
+npm run test:cov
+```
+
+## 📝 Scripts Disponíveis
+
+```bash
+npm run build          # Compilar o projeto
+npm run start          # Iniciar aplicação
+npm run start:dev      # Modo desenvolvimento (watch)
+npm run start:prod     # Modo produção
+npm run seed           # Criar usuário admin
+npm run lint           # Executar linter
+npm run format         # Formatar código
+```
+
+## 🏗️ Arquitetura
+
+O projeto segue a arquitetura em camadas:
+
+```
+Controller (Rotas HTTP)
+    ↓
+Service (Lógica de negócio)
+    ↓
+Repository (TypeORM - Acesso ao banco)
+```
+
+### Estrutura de Pastas
+
+```
+src/
+├── auth/              # Autenticação e autorização
+├── usuarios/          # Gerenciamento de usuários
+├── clientes/          # CRUD de clientes
+├── produtos/          # CRUD de produtos
+├── pedidos/           # CRUD de pedidos
+├── cnpj/              # Integração com API de CNPJ
+├── common/            # Código compartilhado
+│   ├── decorators/    # Decorators customizados
+│   ├── guards/        # Guards de autenticação/autorização
+│   ├── filters/       # Exception filters
+│   ├── dto/           # DTOs compartilhados
+│   └── interfaces/    # Interfaces compartilhadas
+└── config/            # Configurações
+```
+
+## 🔒 Segurança
+
+- Senhas são hashadas com bcrypt (salt rounds: 10)
+- JWT com expiração configurável
+- Validação de entrada com class-validator
+- Guards para proteção de rotas
+- CORS habilitado
+- Tratamento global de exceções
+
+## 📄 Licença
+
+UNLICENSED - Projeto privado
