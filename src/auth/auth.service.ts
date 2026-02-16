@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const { nome, email, senha, role } = registerDto;
+    const { nome, email, senha } = registerDto;
 
     // Check if user already exists
     const existingUser = await this.usuarioRepository.findOne({
@@ -34,12 +34,12 @@ export class AuthService {
     // Hash password
     const hashedPassword = await bcrypt.hash(senha, 10);
 
-    // Create user
+    // Create user — role is always USUARIO; admins are created via seed or promotion
     const usuario = this.usuarioRepository.create({
       nome,
       email,
       senha: hashedPassword,
-      role: role || UserRole.USUARIO,
+      role: UserRole.USUARIO,
     });
 
     await this.usuarioRepository.save(usuario);
@@ -62,10 +62,12 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { email, senha } = loginDto;
 
-    // Find user
-    const usuario = await this.usuarioRepository.findOne({
-      where: { email },
-    });
+    // Find user — explicitly select senha since it has select: false
+    const usuario = await this.usuarioRepository
+      .createQueryBuilder('usuario')
+      .addSelect('usuario.senha')
+      .where('usuario.email = :email', { email })
+      .getOne();
 
     if (!usuario) {
       throw new UnauthorizedException('Credenciais inválidas');

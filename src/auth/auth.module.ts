@@ -14,8 +14,12 @@ import { UsuariosModule } from '../usuarios/usuarios.module';
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService): JwtModuleOptions => {
+        const secret = configService.get<string>('JWT_SECRET');
+        if (!secret) {
+          throw new Error('JWT_SECRET environment variable is required');
+        }
         return {
-          secret: configService.get<string>('JWT_SECRET') || 'default-secret',
+          secret,
           signOptions: {
             expiresIn: configService.get<string>('JWT_EXPIRATION') || '1d',
           },
