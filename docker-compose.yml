@@ -36,6 +36,17 @@ services:
     networks:
       - crud_network
 
+  frontend:
+    build:
+      context: ../crud_frontend
+    container_name: crud_frontend_app
+    ports:
+      - '4200:80'
+    depends_on:
+      - app
+    networks:
+      - crud_network
+
 volumes:
   pgdata:
 
